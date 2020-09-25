@@ -50,3 +50,7 @@ jar {
         attributes('Main-Class': "com.femastudios.esr.Main")
     }
 }
+
+shadowJar {
+    archiveFileName = "esr.jar"
+}
