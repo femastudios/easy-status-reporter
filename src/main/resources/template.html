@@ -1,0 +1,208 @@
+<!--
+The template used to generate the main page
+Parameters:
+1) The title of the web server
+2) The class name of the global state. Can be one of "available", "warning" or "error"
+3) The name of the global state. can be one of "Unavailable", "Warning" or "Error". It may be localized
+4) The description of the current global state. 
+5) The date of the oldest group check (can be approximate to be the last global check)
+6) The duration since when the global state has been similar (e.g. if available, since when it was available).
+7) The list of groups with critical errors.
+8) The list of groups with errors.
+9 The list of groups with warnings.
+10) The list of available groups.
+11) Will be replaced by the HTML generated via group-template.html
+
+-->
+<html>
+<head>
+    <title>%1$s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+			body {
+				font-family: 'Roboto', sans-serif;
+				margin: 0;
+				color: white;
+			}
+			.main {
+				display: flex;
+				flex-direction: column;
+			}
+			.section {
+				width: 100%%;
+				//min-height: 300px;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				padding-top: 42px;
+				padding-bottom: 42px;
+				box-sizing: border-box;
+			}
+			#global-state {
+				min-height: 90%%;
+				justify-content: center;
+			}
+			.group {
+				min-height: 40%%;
+			}
+			.icon {
+				width: 128px;
+				height: 128px;
+			}
+			.icon.error {
+				background-color: green;
+			}
+			.material-icons.px72 {
+				font-size: 72px;
+			}
+			.material-icons.px24 {
+				font-size: 24px;
+			}
+			.material-icons.critical-error:after {
+				content: 'error';
+			}
+			.material-icons.error:after {
+				content: 'error';
+			}
+			.material-icons.warning:after {
+				content: 'warning';
+			}
+			.material-icons.available:after {
+				content: 'done';
+			}
+			.group-table-container{
+				width: 100%%;
+				overflow-x: auto;
+				box-sizing: border-box;
+				padding-left: 16px;
+				padding-right: 16px;
+				display: flex;
+				justify-content: center;
+			}
+			.group-table {
+				max-width: 100%%;
+				border-collapse: collapse;
+				display: block;
+				white-space: nowrap;
+			}
+			.group-table tr {
+				height: 42px;
+			}
+			.group-table td {
+				text-align: center;
+			}
+			.group-table th {
+				background-color: rgba(0,0,0,0.1);
+			}
+			.group-table td,.group-table th {
+				border: 1px solid white;
+				padding: 12px;
+				min-width: 80px;
+			}
+			.section.critical-error,.group-table td.critical-error,.group-table th.critical-error {
+                animation-duration: 1s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+                animation-timing-function: linear;
+                animation-name: CRITICAL-ERROR-ANIMATION;
+                animation-timing-function: steps(1,end);
+				background-color: #D32F2F;
+			}
+            @keyframes CRITICAL-ERROR-ANIMATION { 50%% {
+                    background-color: #630b0b;
+            }}
+
+			.section.error,.group-table td.error,.group-table th.error {
+				background-color: #D32F2F;
+			}
+			.section.warning,.group-table td.warning,.group-table th.warning {
+				background-color: #FFA000;
+			}
+			.section.available {
+				background-color: #689F38;
+			}
+			.section.critical-error:nth-child(odd) {
+                animation-name: CRITICAL-ERROR-ANIMATION-ODD;
+				background-color: #C62828;
+			}
+            @keyframes CRITICAL-ERROR-ANIMATION-ODD { 50%% {
+           	         background-color: #540a0a;
+           	}}
+			.section.error:nth-child(odd) {
+				background-color: #C62828;
+			}
+			.section.warning:nth-child(odd) {
+				background-color: #FF8F00;
+			}
+			.section.available:nth-child(odd) {
+				background-color: #558B2F;
+			}
+			ul {
+				list-style: none; /* Remove list bullets */
+				padding: 0;
+				margin: 0;
+			}
+			#error-groups li:before{
+				content: 'error';
+			}
+			#warning-groups li:before{
+				content: 'warning';
+			}
+
+			.tooltip {
+				position: relative;
+				display: inline-block;
+			}
+
+			.tooltip .tooltiptext {
+				visibility: hidden;
+				background-color: black;
+				color: #fff;
+				text-align: center;
+				border-radius: 6px;
+				padding: 5px;
+				position: absolute;
+				z-index: 1;
+				bottom: calc(100%% + 5px);
+				min-width: 120px;
+				white-space: nowrap;
+				left: -2.5px;
+			}
+
+			.tooltip .tooltiptext::after {
+				content: "";
+				position: absolute;
+				top: 100%%;
+				left: 15px;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: black transparent transparent transparent;
+			}
+
+			.tooltip:hover .tooltiptext {
+				visibility: visible;
+			}
+    </style>
+</head>
+<body>
+<div id="main">
+    <div id="global-state" class="section %2$s">
+        <h1>%1$s</h1>
+        <i class="material-icons px72 %2$s"></i>
+        <h2>%3$s</h2>
+        <p>Since %6$s</p>
+        <p>Last check %5$td %5$tB %5$tY at %5$tH:%5$tM:%5$tS</p>
+        <table>
+            %7$s
+            %8$s
+            %9$s
+            %10$s
+        </table>
+    </div>
+    %11$s
+</div>
+</body>
+</html>

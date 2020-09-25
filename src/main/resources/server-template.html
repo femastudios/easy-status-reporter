@@ -1,0 +1,25 @@
+<!--
+The template used to generate the list of servers for a given group.
+
+Parameters:
+1) The name of the server
+2) The address of the server
+3) The class name of the server state. Can be one of "available", "warning" or "error"
+4) The name of the server state. can be one of "Unavailable", "Warning" or "Error". It may be localized
+5) The description of the current server state. 
+6) The check time for the current server state.
+7) The duration since when the server state has been similar (e.g. if available, since when it was available).
+8) Will be replaced by the HTML generated via service-template.html
+
+-->
+<tr>
+    <th class="%3$s">
+        <div class="tooltip">
+            %1$s
+            <span class="tooltiptext">%6$td %6$tb %6$tY at %6$tH:%6$tM:%6$tS: %5$s (since %7$s)</span>
+        </div>
+    </th>
+
+
+    %8$s
+</tr>

@@ -1,0 +1,17 @@
+<!--
+The template used to generate the list of service for a given server. A service is a test-uri applied to a particular server.
+
+Parameters:
+1) The class name of the service state. Can be one of "available", "warning" or "error"
+2) The name of the service state. can be one of "Unavailable", "Warning" or "Error". It may be localized
+3) The description of the current service state. 
+4) The check time for the current service state.
+5) The duration since when the service state has been similar (e.g. if available, since when it was available).
+
+-->
+<td class="%1$s">
+    <div class="tooltip">
+        <i class="material-icons px24 %1$s"></i>
+        <span class="tooltiptext">%4$td %4$tb %4$tY at %4$tH:%4$tM:%4$tS: %3$s (since %5$s)</span>
+    </div>
+</td>

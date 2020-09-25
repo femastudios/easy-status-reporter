@@ -1,0 +1,19 @@
+<!--
+The template used to generate a basic list of groups of the same state
+
+Parameters:
+1) The title of the group
+2) The class name of the group state. Can be one of "available", "warning" or "error"
+3) The name of the group state. can be one of "Unavailable", "Warning" or "Error". It may be localized
+4) The description of the current group state. 
+5) The check time for the current group state.
+6) The duration since when the group state has been similar (e.g. if available, since when it was available).
+
+-->
+<tr>
+	<td class="tooltip">
+		<i class="material-icons px24 %2$s"></i>
+		<span class="tooltiptext">%5$td %5$tb %5$tY at %5$tH:%5$tM:%5$tS: %4$s</span>
+	</td>
+	<td>%1$s</td>
+</tr>
