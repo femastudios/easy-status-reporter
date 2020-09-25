@@ -11,6 +11,7 @@ import com.femastudios.esr.datastruct.DebouncingInfo
 import com.femastudios.esr.datastruct.Service
 import mu.KotlinLogging
 import org.telegram.abilitybots.api.bot.AbilityBot
+import org.telegram.abilitybots.api.db.MapDBContext
 import org.telegram.abilitybots.api.objects.Ability
 import org.telegram.abilitybots.api.objects.Locality
 import org.telegram.abilitybots.api.objects.Privacy
@@ -21,6 +22,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
+import java.io.File
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -34,7 +36,15 @@ data class TelegramAgent(
     val username: String,
     val userAdminId: Int,
     val chatIds: Set<Long>
-) : Agent, AbilityBot(token, username) {
+) : Agent, AbilityBot(
+    token,
+    username,
+    MapDBContext.onlineInstance(
+        File(File(Main.CONFIG_DIR, "agents" + File.separator + "telegram" + File.separator + "bot").also {
+            it.mkdirs()
+        }, username).absolutePath
+    )
+) {
 
     private val telegramBotsApi = TelegramBotsApi()
     private var lastSentAvailability: GlobalAvailability? = null

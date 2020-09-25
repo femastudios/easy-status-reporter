@@ -84,7 +84,7 @@ data class HttpTest(
                 AvailabilityState.ERROR to e.javaClass.simpleName + ": " + e.message
             } catch (je: JexlEvaluationException) {
                 logger.error(je) { je.message }
-                AvailabilityState.ERROR to je.message
+                AvailabilityState.CRITICAL_ERROR to je.message
             }
         }
         thread.start()

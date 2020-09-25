@@ -113,6 +113,6 @@ class ShutdownDetector {
     }
 
     companion object {
-        private val INSTANCE_INFO_FILE = File("esr.instance-info")
+        private val INSTANCE_INFO_FILE = File(Main.CONFIG_DIR, "esr.instance-info")
     }
 }

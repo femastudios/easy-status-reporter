@@ -15,7 +15,8 @@ import kotlin.system.exitProcess
 private val logger = KotlinLogging.logger {}
 
 object Main {
-    private val CONFIG_FILE = File("config.yml")
+    val CONFIG_DIR : File = File(System.getProperty("com.femastudios.esr.configDir", File("").absolutePath))
+    val CONFIG_FILE = File(CONFIG_DIR, "config.yml")
 
     lateinit var global: Global; private set
     lateinit var globalAvailabilityComputer: GlobalAvailabilityComputer; private set
@@ -64,6 +65,6 @@ object Main {
         WebServer.start(globalAvailabilityComputer)
         globalAvailabilityComputer.start()
         shutdownDetector.register()
-        logger.info("Server started, bound to " + global.webServer.bind.hostAddress + ":" + global.webServer.port)
+        logger.info("Server started, bound to " + global.webServer.socketAddress.toString())
     }
 }
