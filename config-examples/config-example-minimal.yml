@@ -1,0 +1,43 @@
+web-server:
+  title: My Home Server
+  url: https://status.example.com
+
+users:
+  your-name: your-password
+
+agents:
+  - type: telegram-bot # Type of agent
+    token: xxxxx # Token of telegram bot
+    username: bot_username # Username of the telegram bot
+    user-admin-id: 123 # Telegram user admin ID
+    chat-ids: 1234 # Chat ID to send the messages to
+
+groups:
+  # Check your website pages
+  - name: My Website
+    timeout-in: 2s
+    refresh-every: 10s
+    type: http
+    servers: mywebsite.com
+    tests:
+      - name: Home page
+        protocol: https
+      - name: My profile page
+        protocol: https
+        path: /profile
+        headers:
+          Cookie: token=test-user-token
+
+  # Check your database instances
+  - name: Databases
+      type: http
+      servers:
+        - name: DB1
+          address: 192.168.1.101
+        - name: DB2
+          address: 192.168.1.102
+        - name: DB2
+          address: 192.168.1.103
+      tests:
+        - protocol: http
+          port: 9200

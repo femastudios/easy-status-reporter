@@ -1,0 +1,92 @@
+web-server:
+  bind: 0.0.0.0 # Address to bind to, defaults to localhost
+  port: 7828 # Port to bind to, defaults to 7828
+  title: Page title # The title of the page, can be omitted
+  url: https://status.example.com/esr # The public facing URL, needed to generate a link. Mandatory
+
+log-level: info # The log level. Can be trace, debug, info, error or off. Defaults to info
+timezone: Europe/Rome # A timezone. Defaults to system timezone
+debounce: # Changes the behavior of the reporting agents
+  wait-time: 1s # Time to wait before notifying changes. Defaults to 30 seconds
+  max-wait-time: null # Max time between a change and a report. Defaults to 5 minutes
+
+refresh-every: 5s # Global duration that determines how often to recheck your services, defaults to 5 seconds
+timeout-in: 1s # Global wait time before considering a request timed out, defaults to 5 seconds
+
+# Map of username -> password of users that are allowed to access the web page
+# Users will be authenticated through basic auth
+users:
+  user1: password1
+  user2: password2
+
+# List of agents used to notify when something goes wrong
+# Currently only the telegram-bot agent is supported
+agents:
+  - type: telegram-bot # Type of agent
+    token: xxxxx # Token of telegram bot
+    username: bot_username # Username of the telegram bot
+    user-admin-id: 123 # Telegram user admin ID
+    chat-ids: # Chat ID or list of chat IDs to send the messages to
+      - 1234
+      - 4321
+    debounce: # Each agent can override the debounce info. In this case the waitTime is also overridden with the default value
+      maxWaitTime: 10s
+
+# Here we will define the services to check
+# Every group should correspond to a different type of service (e.g. nginx, db, etc.)
+# Each group can have multiple servers
+# Each group can have multiple tests (e.g. checking two pages of a website)
+groups:
+  - name: Nginx # Name of the group
+    timeout-in: 2s # If provided, overrides global timeout-in
+    refresh-every: 10s # If provided, overrides global refresh-every
+
+    # With these three expressions, you can choose when certain availability statuses are triggered
+    # If more than one condition matches, the worst state is chosen
+    # The following variables are available:
+    #  - error.count: number of servers that are in an error state
+    #  - warning.count: number of servers that are in a warning state
+    #  - not_available.count: number of servers that are in a state different from available
+    #  - available.count: number of servers that are in the available state
+    #  - server.count: total number of servers
+    # The values reported here are the default values of this parameters
+    critical-when: available.count == 0 && warning.count == 0
+    error-when: available.count == 0 && warning.count == 0
+    warning-when: not_available.count > 0
+
+    # The type of service (and thus check) that has to be performed
+    # Currently only http(s) is supported
+    type: http
+
+    # List of servers to test. Can be a list of addresses, a single address or a list of objects with the name and address properties
+    # An address can either be an IPv4/6 or its hostname
+    servers:
+      - name: ten
+        address: 192.168.1.10
+      - 192.168.1.11
+      - host1
+
+    # List of tests that must be performed for each server
+    # Each type of group will have a different set of properties to configure the test
+    # This example covers the HTTP(s) case
+    # If not test is provided, a simple get on the / path is done
+    tests:
+      - name: Home page # The name for this test, can be omitted
+        protocol: https # Either http or https, defaults to http
+        port: 443 # The port to connect to. Defaults to 80/443 depending on protocol
+        path: / # The path on the server to request, defaults to /
+        method: GET # The HTTP method to use (e.g. GET, POST, etc.), defaults to GET
+        headers: # Map of key-value pairs to send as request headers, defaults to empty map
+          Cookie: key=value
+          User-Agent: Mozzilla/5.0
+        body: /path/to/file # A file that contains the body to send with the request. Defaults to null (no body)
+
+        # With these three expressions, you can control the success/failure of the test
+        # The following variables are available:
+        #  - response.code: the response code (e.g. 404)
+        #  - response.message: the response message (e.g. Not Found)
+        #  - response.headers: a map where the key is the header name and the value is a list of header values (more than one header with the same name could be present)
+        # The values reported here are the default values of this parameters
+        critical-when: never
+        error-when: response.code != 200
+        warning-when: never
