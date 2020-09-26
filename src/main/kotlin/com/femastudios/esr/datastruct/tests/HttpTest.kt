@@ -62,7 +62,6 @@ data class HttpTest(
                     body.inputStream().transferTo(connection.outputStream)
                 }
 
-                //TODO add variables
                 val context = mapOf(
                     "response.code" to connection.responseCode,
                     "response.message" to connection.responseMessage,

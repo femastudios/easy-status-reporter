@@ -18,21 +18,17 @@ class GroupAvailability(
 
     companion object {
         fun computeState(group: Group<*>, servers: Set<ServerAvailability>): AvailabilityState {
-            return minOf(
-                group.worstPossibleState,
-                when {
-                    group.criticalWhen.isMet(servers, "critical-when") -> CRITICAL_ERROR
-                    group.errorWhen.isMet(servers, "error-when") -> ERROR
-                    group.warningWhen.isMet(servers, "warning-when") -> WARNING
-                    else -> AVAILABLE
-                }
-            )
+            return when {
+                group.criticalWhen.isMet(servers, "critical-when") -> CRITICAL_ERROR
+                group.errorWhen.isMet(servers, "error-when") -> ERROR
+                group.warningWhen.isMet(servers, "warning-when") -> WARNING
+                else -> AVAILABLE
+            }
         }
     }
 }
 
-private fun JexlExpression.isMet(servers: Set<ServerAvailability>, name : String): Boolean {
-    //TODO add variables
+private fun JexlExpression.isMet(servers: Set<ServerAvailability>, name: String): Boolean {
     val jc = MapContext().apply {
         this["error.count"] = servers.count { s -> s.state == ERROR }
         this["warning.count"] = servers.count { s -> s.state == WARNING }

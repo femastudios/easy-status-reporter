@@ -11,8 +11,8 @@ import java.time.ZoneId
 data class Global(
     val webServer: WebServerConfig,
     val logLevel: LogLevel = LogLevel.INFO,
-    val debounce: DebouncingInfo = DebouncingInfo.DEFAULT,
     val timezone: ZoneId = ZoneId.systemDefault(),
+    val debounce: DebouncingInfo = DebouncingInfo(),
     val refreshEvery: Duration = Duration.ofSeconds(5),
     val timeoutIn: Duration = Duration.ofSeconds(5),
     val users: Set<User>,

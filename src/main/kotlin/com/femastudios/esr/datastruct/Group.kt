@@ -11,7 +11,6 @@ interface Group<TEST : Test> : AvailabilityChecker<GroupAvailability> {
     val name : String
     val timeoutIn: Duration?
     val refreshEvery: Duration?
-    val worstPossibleState: AvailabilityState
     val criticalWhen: JexlExpression
     val errorWhen: JexlExpression
     val warningWhen: JexlExpression

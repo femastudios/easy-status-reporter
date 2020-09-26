@@ -20,12 +20,11 @@ data class HttpGroup(
     override val name: String,
     override val timeoutIn: Duration? = null,
     override val refreshEvery: Duration? = null,
-    override val worstPossibleState: AvailabilityState = AvailabilityState.ERROR,
     override val criticalWhen: JexlExpression = Group.DEFAULT_CRITICAL_ERROR_CONDITION,
     override val errorWhen: JexlExpression = Group.DEFAULT_ERROR_CONDITION,
     override val warningWhen: JexlExpression = Group.DEFAULT_WARNING_CONDITION,
     override val servers: List<Server>,
-    override val tests: List<HttpTest>
+    override val tests: List<HttpTest> = listOf(HttpTest())
 ) : Group<HttpTest>, BaseAvailabilityChecker<GroupAvailability>() {
 
     override val serviceProvider = ServiceProvider(this)
