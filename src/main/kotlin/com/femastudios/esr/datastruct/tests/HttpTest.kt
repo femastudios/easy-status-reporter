@@ -5,10 +5,7 @@ import com.femastudios.esr.availablity.ServiceAvailability
 import com.femastudios.esr.datastruct.Global
 import com.femastudios.esr.datastruct.Service
 import com.femastudios.esr.datastruct.Test
-import com.femastudios.esr.util.JEXL_ENGINE
-import com.femastudios.esr.util.JexlEvaluationException
-import com.femastudios.esr.util.createJexlContext
-import com.femastudios.esr.util.evaluateBoolean
+import com.femastudios.esr.util.*
 import mu.KotlinLogging
 import org.apache.commons.jexl3.JexlExpression
 import java.io.File
@@ -69,17 +66,18 @@ data class HttpTest(
                     "response.headers" to connection.headerFields
                 ).createJexlContext()
 
+                val response = "(Response is ${connection.responseCode} ${connection.responseMessage})"
                 when {
                     errorWhen.evaluateBoolean(context, "error-when") -> {
-                        AvailabilityState.ERROR to "Error condition is met"
+                        AvailabilityState.ERROR to "Error condition is met $response"
                     }
                     warningWhen.evaluateBoolean(context, "warning-when") -> {
-                        AvailabilityState.WARNING to "Warning condition is met"
+                        AvailabilityState.WARNING to "Warning condition is met $response"
                     }
                     else -> AvailabilityState.AVAILABLE to "Available"
                 }
             } catch (e: SocketTimeoutException) {
-                AvailabilityState.ERROR to "Timeout reached"
+                null
             } catch (e: IOException) {
                 AvailabilityState.ERROR to e.javaClass.simpleName + ": " + e.message
             } catch (je: JexlEvaluationException) {
@@ -90,7 +88,7 @@ data class HttpTest(
         thread.join(realTimeout.toMillis())
         thread.interrupt()
         connectionReference?.disconnect()
-        val result = resultTemp ?: AvailabilityState.ERROR to "Timeout reached"
+        val result = resultTemp ?: AvailabilityState.ERROR to "Timeout of ${realTimeout.format()} reached"
 
         logger.debug {
             "Test %s/%s/%s completed with result: %s, %s".format(
