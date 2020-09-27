@@ -2,6 +2,7 @@ package com.femastudios.esr.util.decoders
 
 import com.femastudios.esr.datastruct.Global
 import com.femastudios.esr.datastruct.Group
+import com.femastudios.esr.datastruct.Test
 import com.femastudios.esr.util.NodeConfigSource
 import com.femastudios.esr.datastruct.groups.HttpGroup
 import com.sksamuel.hoplite.*
@@ -9,6 +10,7 @@ import com.sksamuel.hoplite.decoder.Decoder
 import com.sksamuel.hoplite.fp.invalid
 import com.sksamuel.hoplite.fp.valid
 import kotlin.reflect.KType
+import kotlin.reflect.jvm.jvmErasure
 import kotlin.reflect.typeOf
 
 
@@ -34,8 +36,7 @@ object GroupDecoder : Decoder<Group<*>> {
 
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     override fun supports(type: KType): Boolean {
-        return type == typeOf<Group<*>>()
+        return type.jvmErasure == Group::class
     }
 }
