@@ -1,5 +1,8 @@
 package com.femastudios.esr.util
 
+import com.sksamuel.hoplite.ConfigFailure
+import com.sksamuel.hoplite.fp.Validated
+import com.sksamuel.hoplite.fp.valid
 import org.apache.commons.jexl3.*
 import java.time.Duration
 import java.util.*
@@ -20,7 +23,7 @@ fun Map<String, *>.createJexlContext(): MapContext {
 }
 
 @Throws(InterruptedException::class)
-fun Collection<Runnable>.executeParallely(threadName : String) {
+fun Collection<Runnable>.executeParallely(threadName: String) {
     val threads = HashSet<Thread>(size)
     for (runnable in this) {
         val t = Thread(runnable, threadName)
@@ -56,4 +59,11 @@ fun Duration.format(): String {
         absSeconds % 60
     )
     return if (seconds < 0) "-$positive" else positive
+}
+
+inline fun <reified T> Validated<ConfigFailure, *>.cast(): Validated<ConfigFailure, T> {
+    return when (this) {
+        is Validated.Invalid -> this
+        is Validated.Valid -> (value as T).valid()
+    }
 }
