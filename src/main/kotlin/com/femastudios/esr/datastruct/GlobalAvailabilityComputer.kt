@@ -61,7 +61,7 @@ class GlobalAvailabilityComputer(val global: Global) {
 			}
 			isStarted = true
 			for (group in global.groups) {
-				Thread(GroupReporter(group)).start()
+				Thread(GroupReporter(group), "Group ${group.name} reporter").start()
 			}
 		}
 	}

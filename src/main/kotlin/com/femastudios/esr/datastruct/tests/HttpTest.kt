@@ -1,13 +1,13 @@
 package com.femastudios.esr.datastruct.tests
 
-import com.femastudios.esr.util.JEXL_ENGINE
-import com.femastudios.esr.util.JexlEvaluationException
 import com.femastudios.esr.availablity.AvailabilityState
 import com.femastudios.esr.availablity.ServiceAvailability
-import com.femastudios.esr.util.createJexlContext
 import com.femastudios.esr.datastruct.Global
 import com.femastudios.esr.datastruct.Service
 import com.femastudios.esr.datastruct.Test
+import com.femastudios.esr.util.JEXL_ENGINE
+import com.femastudios.esr.util.JexlEvaluationException
+import com.femastudios.esr.util.createJexlContext
 import com.femastudios.esr.util.evaluateBoolean
 import mu.KotlinLogging
 import org.apache.commons.jexl3.JexlExpression
@@ -18,6 +18,7 @@ import java.net.SocketTimeoutException
 import java.net.URL
 import java.time.Instant
 import java.util.*
+import kotlin.concurrent.thread
 
 private val logger = KotlinLogging.logger { }
 
@@ -45,7 +46,7 @@ data class HttpTest(
 
         var resultTemp: Pair<AvailabilityState, String>? = null
         var connectionReference: HttpURLConnection? = null
-        val thread = Thread {
+        val thread = thread(name = "HTTP Test $displayName") {
             resultTemp = try {
                 val url = URL(protocol.name.toLowerCase(Locale.ROOT), service.server.address.hostName, port, path)
                 val connection = url.openConnection() as HttpURLConnection
@@ -86,7 +87,6 @@ data class HttpTest(
                 AvailabilityState.CRITICAL_ERROR to je.message
             }
         }
-        thread.start()
         thread.join(realTimeout.toMillis())
         thread.interrupt()
         connectionReference?.disconnect()

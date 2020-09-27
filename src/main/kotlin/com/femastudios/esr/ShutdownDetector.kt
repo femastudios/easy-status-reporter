@@ -46,7 +46,7 @@ class ShutdownDetector {
                 onShutdownAnomalyListeners.forEach { it.onShutdownAnomaly(lastShutdownAnomaly) }
             }
 
-            val thread = thread(isDaemon = true) {
+            val thread = thread(name = "Instance updater") {
                 while (true) {
                     try {
                         val instant = Instant.now()
@@ -63,7 +63,7 @@ class ShutdownDetector {
                 }
             }
 
-            Runtime.getRuntime().addShutdownHook(Thread {
+            Runtime.getRuntime().addShutdownHook(thread(start = false, name = "Shutdown hook") {
                 logger.info { "Shutdown requested" }
                 thread.interrupt()
                 thread.join()

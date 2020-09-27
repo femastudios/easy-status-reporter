@@ -9,7 +9,6 @@ import com.femastudios.esr.availablity.MultiAvailabilityHolder
 import com.femastudios.esr.datastruct.Agent
 import com.femastudios.esr.datastruct.DebouncingInfo
 import com.femastudios.esr.datastruct.Service
-import com.femastudios.esr.datastruct.WebServerConfig
 import mu.KotlinLogging
 import org.telegram.abilitybots.api.bot.AbilityBot
 import org.telegram.abilitybots.api.db.MapDBContext
@@ -24,7 +23,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import java.io.File
-import java.time.Duration
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -32,7 +30,7 @@ import java.time.format.FormatStyle
 
 private val logger = KotlinLogging.logger {}
 
-open class A(val i : Int)
+open class A(val i: Int)
 
 data class TelegramAgent(
     override val debounce: DebouncingInfo? = null,
@@ -86,7 +84,7 @@ data class TelegramAgent(
         } catch (e: TelegramApiException) {
             logger.error(e) { "Cannot register bot '$username'" }
         }
-        debouncer = (debounce ?: Main.global.debounce).newDebouncerThread<GlobalAvailability> {
+        debouncer = (debounce ?: Main.global.debounce).newDebouncerThread("Telegram agent $username debouncer") {
             val lastAvailability = it.last()
             val lsa = lastSentAvailability
             // Skip if message is the same as the last sent one

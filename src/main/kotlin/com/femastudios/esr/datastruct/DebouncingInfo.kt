@@ -8,11 +8,12 @@ data class DebouncingInfo(
     val maxWaitTime: Duration? = Duration.ofMinutes(5)
 ) {
 
-    fun <T> newDebouncerThread(operation: (List<T>) -> Unit): DebouncerThread<T> {
+    fun <T> newDebouncerThread(name : String, operation: (List<T>) -> Unit): DebouncerThread<T> {
         return DebouncerThread(
             waitTime = waitTime.toMillis(),
             maxWaitTime = maxWaitTime?.toMillis(),
-            operation = operation
+            operation = operation,
+            name = name
         )
     }
 }
