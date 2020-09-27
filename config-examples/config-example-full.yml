@@ -21,9 +21,10 @@ users:
 
 # List of agents used to notify when something goes wrong
 # Currently only the telegram-bot agent is supported
+# To create a bot, talk to https://t.me/botfather
 agents:
   - type: telegram-bot # Type of agent
-    token: xxxxx # Token of telegram bot
+    token: 00000:XXXXX # Token of telegram bot
     username: bot_username # Username of the telegram bot
     user-admin-id: 123 # Telegram user admin ID
     chat-ids: # Chat ID or list of chat IDs to send the messages to

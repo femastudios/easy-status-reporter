@@ -7,7 +7,7 @@ users:
 
 agents:
   - type: telegram-bot # Type of agent
-    token: xxxxx # Token of telegram bot
+    token: 00000:XXXXX # Token of telegram bot
     username: bot_username # Username of the telegram bot
     user-admin-id: 123 # Telegram user admin ID
     chat-ids: 1234 # Chat ID to send the messages to
