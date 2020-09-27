@@ -44,7 +44,7 @@ fun Iterable<AvailabilityHolder>.mergedMessages(): String = mapTo(HashSet()) { i
  * Returns an [Instant] representing the minimum check time for the iterable of [AvailabilityHolder].
  * @throws NoSuchElementException if the iterable is empty
  */
-fun Iterable<AvailabilityHolder>.minCheck(): Instant = minByOrNull { it.checkTime }?.checkTime ?: throw NoSuchElementException("Empty collection")
+fun Iterable<AvailabilityHolder>.minCheck(): Instant = minBy { it.checkTime }?.checkTime ?: throw NoSuchElementException("Empty collection")
 
 /**
  * Returns the worst state in the iterable of [AvailabilityHolder].

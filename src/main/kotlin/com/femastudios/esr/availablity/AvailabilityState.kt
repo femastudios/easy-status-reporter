@@ -20,10 +20,10 @@ enum class AvailabilityState(val cssClassname: String, val humanName: String, va
  * Returns the worst [AvailabilityState] in the iterable.
  * @throws NoSuchElementException if the iterable is empty
  */
-fun Iterable<AvailabilityState>.worst(): AvailabilityState = maxOrNull() ?: throw NoSuchElementException("Empty collection")
+fun Iterable<AvailabilityState>.worst(): AvailabilityState = max() ?: throw NoSuchElementException("Empty collection")
 
 /**
  * Returns the best [AvailabilityState] in the iterable.
  * @throws NoSuchElementException if the iterable is empty
  */
-fun Iterable<AvailabilityState>.best(): AvailabilityState = minOrNull() ?: throw NoSuchElementException("Empty collection")
+fun Iterable<AvailabilityState>.best(): AvailabilityState = min() ?: throw NoSuchElementException("Empty collection")

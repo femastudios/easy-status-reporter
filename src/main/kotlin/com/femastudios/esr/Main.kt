@@ -15,7 +15,7 @@ import kotlin.system.exitProcess
 private val logger = KotlinLogging.logger {}
 
 object Main {
-    val CONFIG_DIR : File = File(System.getProperty("com.femastudios.esr.configDir", File("").absolutePath))
+    val CONFIG_DIR: File = File(System.getProperty("com.femastudios.esr.configDir", File("").absolutePath))
     val CONFIG_FILE = File(CONFIG_DIR, "config.yml")
 
     lateinit var global: Global; private set
