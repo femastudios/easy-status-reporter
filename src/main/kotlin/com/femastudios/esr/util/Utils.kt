@@ -1,5 +1,6 @@
 package com.femastudios.esr.util
 
+import com.femastudios.esr.Main
 import com.sksamuel.hoplite.ConfigFailure
 import com.sksamuel.hoplite.fp.Validated
 import com.sksamuel.hoplite.fp.valid
@@ -66,4 +67,8 @@ inline fun <reified T> Validated<ConfigFailure, *>.cast(): Validated<ConfigFailu
         is Validated.Invalid -> this
         is Validated.Valid -> (value as T).valid()
     }
+}
+
+fun getBuildVersion(): String {
+    return Main::class.java.getPackage().implementationVersion
 }

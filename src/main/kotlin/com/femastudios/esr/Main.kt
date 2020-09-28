@@ -7,9 +7,13 @@ import com.femastudios.esr.datastruct.GlobalAvailabilityComputer
 import com.femastudios.esr.datastruct.Server
 import com.femastudios.esr.listeners.AvailabilityLoggerListener
 import com.femastudios.esr.listeners.ShutdownLoggerListener
+import com.femastudios.esr.util.getBuildVersion
 import mu.KotlinLogging
 import org.slf4j.impl.SimpleLogger
 import java.io.File
+import java.io.IOException
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
 import kotlin.system.exitProcess
 
 private val logger = KotlinLogging.logger {}
@@ -31,7 +35,7 @@ object Main {
         System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, global.logLevel.name)
         globalAvailabilityComputer = GlobalAvailabilityComputer(global)
 
-        logger.info("Welcome to EASY STATUS REPORTER!")
+        logger.info("Welcome to EASY STATUS REPORTER v" + getBuildVersion())
         logger.info("Current log level: " + global.logLevel)
 
         logger.debug("Registering shutdown detector...")
@@ -62,9 +66,19 @@ object Main {
 
         //Starting services
         logger.debug("Starting services...")
-        WebServer.start(globalAvailabilityComputer)
+        try {
+            WebServer.start(globalAvailabilityComputer)
+        } catch (e: Exception) {
+            when (e) {
+                is IOException, is KeyManagementException, is NoSuchAlgorithmException -> {
+                    logger.error(e) { "Unable to start web server" }
+                    exitProcess(1)
+                }
+                else -> throw e
+            }
+        }
+        logger.info("Server started, bound to " + global.webServer.socketAddress.toString())
         globalAvailabilityComputer.start()
         shutdownDetector.register()
-        logger.info("Server started, bound to " + global.webServer.socketAddress.toString())
     }
 }
