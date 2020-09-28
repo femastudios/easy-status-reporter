@@ -5,6 +5,8 @@ server on a cluster of multiple nodes.
 The tool will monitor the specified endpoints and report to you when there are problems. It also provides a web server
 serving a single page with an overview of all your services.
 
+You can find example screenshots [here](https://github.com/femastudios/easy-status-reporter/tree/master/screenshots).
+
 # Installation
 ## Run with docker
 Simply pull the image `femastudios/easy-status-reporter` and give a few parameters. Example using docker compose:
@@ -33,3 +35,8 @@ If you want to go more in depth about the config file, take a look at the
 
 All expressions in the config are parsed using JEXL. 
 For more information about its syntax please see [this page](https://commons.apache.org/proper/commons-jexl/reference/syntax.html). 
+
+Last but not least: this software only opens a simple HTTP web server (no TLS/SSL). It is highly recommended running it 
+behind a [reverse proxy](https://en.wikipedia.org/wiki/Reverse_proxy), like [Traefik](https://doc.traefik.io/traefik/v2.3/getting-started/quick-start/) 
+or [Nginx](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/), that takes care of HTTPS.
+For this task you can use easy to use docker containers such as [linuxserver/letsencrypt](https://docs.linuxserver.io/images/docker-letsencrypt).
